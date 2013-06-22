@@ -201,6 +201,7 @@ public class NumberFinder {
 		String chosenOne = "";
 		String finalNum = "";
 		String[] times;
+		//TODO I should neaten this up at some point...
 		for(int q = 0; q < code.length; q++){
 			chosenOne = code[q];
 			if(chosenOne.contains("X")){
@@ -267,79 +268,46 @@ public class NumberFinder {
 	}
 	
 	public void clickAnswer(){
-		Robot robo;
-		int onlyXPoint = bounds.x + 186;
 		int firstYPoint = bounds.y + 158;
 		int secondYPoint = bounds.y + 197;
 		int thirdYPoint = bounds.y + 236;
 		int fourthYPoint = bounds.y + 275;
-		System.out.println("------");
-		System.out.println(questionAnswer);
-		System.out.println(lastQuestionAnswer);
-		System.out.println("------");
 		if(questionAnswer == lastQuestionAnswer){
 			FreeRiceBot.count -= 1;
 		}
 		else if(firstAnswer == questionAnswer){
-			try {
-				lastQuestionAnswer = questionAnswer;
-				robo = new Robot();
-				robo.mouseMove(onlyXPoint, firstYPoint);
-				robo.mousePress(InputEvent.BUTTON1_MASK);
-				robo.mouseRelease(InputEvent.BUTTON1_MASK);
-				robo.delay(50);
-				robo.mouseMove(0, 0);
-				robo.delay(FreeRiceBot.delayAmount); //1100
-			} catch (AWTException e) {
-				e.printStackTrace();
-			}
+			clickAnswer(firstYPoint);
 		}
 		else if(secondAnswer == questionAnswer){
-			try {
-				lastQuestionAnswer = questionAnswer;
-				robo = new Robot();
-				robo.mouseMove(onlyXPoint, secondYPoint);
-				robo.mousePress(InputEvent.BUTTON1_MASK);
-				robo.mouseRelease(InputEvent.BUTTON1_MASK);
-				robo.delay(50);
-				robo.mouseMove(0, 0);
-				robo.delay(FreeRiceBot.delayAmount); //1100
-			} catch (AWTException e) {
-				e.printStackTrace();
-			}
+			clickAnswer(secondYPoint);
 		}
 		else if(thirdAnswer == questionAnswer){
-			try {
-				lastQuestionAnswer = questionAnswer;
-				robo = new Robot();
-				robo.mouseMove(onlyXPoint, thirdYPoint);
-				robo.mousePress(InputEvent.BUTTON1_MASK);
-				robo.mouseRelease(InputEvent.BUTTON1_MASK);
-				robo.delay(50);
-				robo.mouseMove(0, 0);
-				robo.delay(FreeRiceBot.delayAmount);  //1100
-			} catch (AWTException e) {
-				e.printStackTrace();
-			}
+			clickAnswer(thirdYPoint);
 		}
 		else if(fourthAnswer == questionAnswer){
-			try {
-				lastQuestionAnswer = questionAnswer;
-				robo = new Robot();
-				robo.mouseMove(onlyXPoint, fourthYPoint);
-				robo.mousePress(InputEvent.BUTTON1_MASK);
-				robo.mouseRelease(InputEvent.BUTTON1_MASK);
-				robo.delay(50);
-				robo.mouseMove(0, 0);
-				robo.delay(FreeRiceBot.delayAmount);  //1100
-			} catch (AWTException e) {
-				e.printStackTrace();
-			}
+			clickAnswer(fourthYPoint);
 		}
 		else{
 			throw new Error("No Solution");
 		}
 	}	
+	
+	private void clickAnswer(int y){
+		lastQuestionAnswer = questionAnswer;
+		int onlyXPoint = bounds.x + 186;
+		Robot robo;
+		try {
+			robo = new Robot();
+			robo.mouseMove(onlyXPoint, y);
+			robo.mousePress(InputEvent.BUTTON1_MASK);
+			robo.mouseRelease(InputEvent.BUTTON1_MASK);
+			robo.delay(50);
+			robo.mouseMove(0, 0);
+			robo.delay(FreeRiceBot.delayAmount);
+		} catch (AWTException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	public boolean isLoading(){
 		for(int h = 114; h < 122; h++){

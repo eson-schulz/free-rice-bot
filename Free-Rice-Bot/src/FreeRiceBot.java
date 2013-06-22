@@ -156,7 +156,6 @@ public class FreeRiceBot {
 				System.out.println("Count: " + count);
 			}
 		}
-		System.out.println(boxBounds.y);
 		
 		long endTime = System.currentTimeMillis();
 		System.out.println("Time: " + (endTime - startTime) / 1000.0);
