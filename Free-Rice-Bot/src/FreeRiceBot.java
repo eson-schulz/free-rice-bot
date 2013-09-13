@@ -8,10 +8,11 @@ import java.util.Scanner;
 
 public class FreeRiceBot {
 	public static int count;
-	public static int countMax = 12;
-	public static int delayAmount = 100;
+	public static int countMax = 50;
+	public static int delayAmount = 200;
+	public static int errorCount = 0;
 	
-	public static boolean adLoadEnabled = false;
+	public static boolean adLoadEnabled = true;
 	
 	private BufferedImage screen;
 	private int screenWidth, screenHeight;

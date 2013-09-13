@@ -4,28 +4,29 @@ import java.awt.Robot;
 import java.awt.event.InputEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import java.awt.FlowLayout;
+//import javax.swing.ImageIcon;
+//import javax.swing.JFrame;
+//import javax.swing.JLabel;
+//import java.awt.FlowLayout;
 
 
 public class NumberFinder {
 	Rectangle bounds;
 	BufferedImage box;
+	
+	//The list of codes that match up to the key codes created
+	private final List<String> QUESTION_CODES;
+	private final List<String> ANSWER_CODES;
+	
 	private int firstAnswer, secondAnswer, thirdAnswer, fourthAnswer;
 	private int questionAnswer;
 	private static int lastQuestionAnswer;
 	
 	public void setVariables(){
 		int w = 50;
-		
-//		JFrame frame = new JFrame();
-//		frame.getContentPane().setLayout(new FlowLayout());
-//		frame.getContentPane().add(new JLabel(new ImageIcon(box)));
-//		frame.pack();
-//		frame.setVisible(true);
 		
 		ArrayList<Integer> firstAnswerList;
 		ArrayList<Integer> secondAnswerList;
@@ -50,13 +51,9 @@ public class NumberFinder {
 		questionList = this.setList(w, h);
 		
 		this.firstAnswer = convertListToNumber(firstAnswerList, true);
-		//System.out.println("1");
 		this.secondAnswer = convertListToNumber(secondAnswerList, true);
-		//System.out.println("2");
 		this.thirdAnswer = convertListToNumber(thirdAnswerList, true);
-		//System.out.println("3");
 		this.fourthAnswer = convertListToNumber(fourthAnswerList, true);
-		//System.out.println("4");
 		this.questionAnswer = convertListToNumber(questionList, false);
 	}
 	
@@ -153,45 +150,23 @@ public class NumberFinder {
 		String finalNum = "";
 		for(int q = 0; q < code.length; q++){
 			chosenOne = code[q];
-			if(chosenOne.equals("131121")){     //Zero
-				finalNum += "0";
-			}
-			else if(chosenOne.equals("141")){   //One
-				finalNum += "1";
-			}
-			else if(chosenOne.equals("1511121")){   //Two
-				finalNum += "2";
-			}
-			else if(chosenOne.equals("1311116")){   //Three
-				finalNum += "3";
-			}
-			else if(chosenOne.equals("151")){   //Four
-				finalNum += "4";
-			}
-			else if(chosenOne.equals("131111111")){   //Five
-				finalNum += "5";
-			}
-			else if(chosenOne.equals("111121")){   //Six
-				finalNum += "6";
-			}
-			else if(chosenOne.equals("1111111111")){   //Seven
-				finalNum += "7";
-			}
-			else if(chosenOne.equals("151116")){   //Eight
-				finalNum += "8";
-			}
-			else if(chosenOne.equals("151111")){   //Nine
-				finalNum += "9";
-			}
-			else if(chosenOne.equals("1311111111111111111")){
-				finalNum += "57";
-			}
-			else if(chosenOne.equals("11111111111111111111")){
-				finalNum += "77";
-			}
-			else{
-				System.out.println(code[q]);
-				throw new Error("Not a legal number");
+			for(int i = 0; i < ANSWER_CODES.size(); i++){
+				if(chosenOne.equals(ANSWER_CODES.get(i))){
+					finalNum += i;
+					break;
+				}
+				else if(i == ANSWER_CODES.size() - 1){
+					if(chosenOne.equals("1311111111111111111")){
+						finalNum += "57";
+					}
+					else if(chosenOne.equals("11111111111111111111")){
+						finalNum += "77";
+					}
+					else{
+						System.out.println(code[q]);
+						throw new Error("Not a legal number");
+					}
+				}
 			}
 		}
 		return Integer.parseInt(finalNum);
@@ -230,38 +205,16 @@ public class NumberFinder {
 					return Integer.toString(Integer.parseInt(firstNum) * Integer.parseInt(secondNum));
 				}
 			}
-			else if(chosenOne.equals("111117")){     //Zero
-				finalNum += "0";
-			}
-			else if(chosenOne.equals("13121")){   //One
-				finalNum += "1";
-			}
-			else if(chosenOne.equals("1511117")){   //Two
-				finalNum += "2";
-			}
-			else if(chosenOne.equals("111111111")){   //Three
-				finalNum += "3";
-			}
-			else if(chosenOne.equals("15117")){   //Four
-				finalNum += "4";
-			}
-			else if(chosenOne.equals("1511111111")){   //Five
-				finalNum += "5";
-			}
-			else if(chosenOne.equals("1511111")){   //Six
-				finalNum += "6";
-			}
-			else if(chosenOne.equals("11111111111")){   //Seven
-				finalNum += "7";
-			}
-			else if(chosenOne.equals("11111121")){   //Eight
-				finalNum += "8";
-			}
-			else if(chosenOne.equals("111111")){   //Nine
-				finalNum += "9";
-			}
 			else{
-				throw new Error("Not a legal number " + code[q]);
+				for(int i = 0; i < QUESTION_CODES.size(); i++){
+					if(chosenOne.equals(QUESTION_CODES.get(i))){
+						finalNum += i;
+						break;
+					}
+					if(i == QUESTION_CODES.size() - 1){
+						throw new Error("Not a legal number " + code[q]);
+					}
+				}
 			}
 		}
 		return finalNum;
@@ -272,8 +225,10 @@ public class NumberFinder {
 		int secondYPoint = bounds.y + 197;
 		int thirdYPoint = bounds.y + 236;
 		int fourthYPoint = bounds.y + 275;
-		if(questionAnswer == lastQuestionAnswer){
+		if(questionAnswer == lastQuestionAnswer && FreeRiceBot.errorCount < 60){
 			FreeRiceBot.count -= 1;
+			FreeRiceBot.errorCount += 1;
+			System.out.println("Same Question as Previously, Waiting.");
 		}
 		else if(firstAnswer == questionAnswer){
 			clickAnswer(firstYPoint);
@@ -293,6 +248,8 @@ public class NumberFinder {
 	}	
 	
 	private void clickAnswer(int y){
+		FreeRiceBot.errorCount = 0;
+		System.out.println("Clicking");
 		lastQuestionAnswer = questionAnswer;
 		int onlyXPoint = bounds.x + 186;
 		Robot robo;
@@ -328,5 +285,8 @@ public class NumberFinder {
 		} catch (AWTException e) {
 			throw new Error("NumberFinder Constructor - Error");
 		}
+		
+		ANSWER_CODES = Arrays.asList("131121", "141", "1511121", "1311116", "151", "131111111", "111121", "1111111111", "151116", "151111");
+		QUESTION_CODES = Arrays.asList("111117", "13121", "1511117", "111111111", "15117", "1511111111", "1511111", "11111111111", "11111121", "111111");
 	}
 }
