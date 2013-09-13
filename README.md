@@ -2,7 +2,7 @@ A bot for FreeRice.com, it reads pixels instead of the typical, boring scraping.
 
 -The program uses Robot, which takes control of the mouse.
 
--Use Chrome, for some reason the color scheme is slightly different then others. (I believe it also need Windows, not sure)
+-Use Chrome, for some reason the color scheme is slightly different then others. (I believe it also needs Windows, not sure)
 
 -Make sure there is nothing around the main square of the screen on your computer.
 
